@@ -1,0 +1,7 @@
+
+eax, ecx, and edx are temp regs, caller saved
+
+everything else is callee saved
+
+cdecl arg passing, everything passed on stack right to left
+caller is responsible for stack cleanup
