@@ -28,7 +28,7 @@ $(TARGET): $(START) $(C_OBJECTS) $(A_OBJECTS) Makefile
 	$(CC) $(CFLAGS) $(DEPENFLAGS) $(INCLUDE) -c $< -o $@
 
 %_a.o: %.asm Makefile
-	@$(AS) -M $< -o $(patsubst %.asm,%_a.d,$<)
+	@$(AS) -M $< > $(patsubst %.asm,%_a.d,$<)
 	$(AS) -felf $(CONSTANTS) $< -o $@
 
 -include $(DEPENDS)
