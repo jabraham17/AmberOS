@@ -3,10 +3,10 @@
 override CFLAGS+= -ffreestanding -m32 --target=i386-unknown-linux-gnu
 override LDFLAGS+= -Ttext $(KERNEL_OFFSET) --oformat binary
 
-C_SOURCES=$(wildcard *.c)
+C_SOURCES=$(wildcard *.c) $(wildcard */*.c) $(wildcard */*/*.c)
 C_OBJECTS=$(patsubst %.c,%.o,$(C_SOURCES))
 START=_start_a.o
-A_SOURCES=$(wildcard *.asm)
+A_SOURCES=$(wildcard *.asm) $(wildcard */*.asm) $(wildcard */*/*.asm)
 A_OBJECTS=$(filter-out $(START),$(patsubst %.asm,%_a.o,$(A_SOURCES)))
 DEPENDS=$(patsubst %.c,%.d,$(C_SOURCES))
 DEPENDS+= $(patsubst %.asm,%_a.d,$(A_SOURCES))
@@ -22,7 +22,7 @@ clean:
 	$(RM) $(TARGET) $(DEPENDS) $(START) $(C_OBJECTS) $(A_OBJECTS)
 
 $(TARGET): $(START) $(C_OBJECTS) $(A_OBJECTS) Makefile
-	$(LD) $(LDFLAGS) $(START) $(C_OBJECTS) $(A_OBJECTS) $(LDLIBS) -o $@
+	$(LD) -Ttext 0x1000 $(START) $(C_OBJECTS) $(A_OBJECTS) $(LDFLAGS) $(LDLIBS) -o $@
 
 %.o: %.c Makefile
 	$(CC) $(CFLAGS) $(DEPENFLAGS) $(INCLUDE) -c $< -o $@

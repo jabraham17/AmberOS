@@ -34,7 +34,6 @@ _boot:
     mov sp, bp
 
     call clear_screen_16
-    ; mov byte [globals.current_screen_row], 15
     mov ax, strings.real_mode
     call print_str_16
 
@@ -57,8 +56,7 @@ load_kernel:
 
     mov bx, KERNEL_OFFSET
     mov dl, [globals.boot_drive]
-    xor ax, ax
-    mov al, 0xf ; num sectrs: BE VERY CAREFUL SETTING THIS VALUE
+    mov ax, 0x000f ; num sectrs: BE VERY CAREFUL SETTING THIS VALUE
 
     call disk_load
 

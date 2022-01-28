@@ -74,7 +74,7 @@ print_str_32:
 
 ; eax conatins the hex value to be printed
 print_hex_32:
-%if 1
+%if 0
     pusha
 
     ; loop 8 times for 8 hex values
