@@ -1,0 +1,7 @@
+# useful gdb commands that I don't want to have to redefine every time
+
+# step instruction and print
+define sip
+stepi
+x/i $pc
+end

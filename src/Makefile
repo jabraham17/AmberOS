@@ -11,9 +11,10 @@ all: $(TARGET)
 	@:
 
 $(TARGET): $(BOOT_BIN) $(KERNEL_BIN) Makefile
+	# cat $(BOOT_BIN) $(KERNEL_BIN) > $@
 	dd if=/dev/zero of=$@ bs=512 count=$(NSECTORS) 2>/dev/null
 	dd if=$(BOOT_BIN) of=$@ conv=notrunc bs=512 seek=0 count=1 2>/dev/null
-	dd if=$(KERNEL_BIN) of=$@ conv=notrunc bs=512 seek=1 count=1 2>/dev/null
+	dd if=$(KERNEL_BIN) of=$@ conv=notrunc bs=512 seek=1 count=5 2>/dev/null
 
 $(BOOT_BIN): Makefile
 	@echo "make --directory=boot"

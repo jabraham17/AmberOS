@@ -41,7 +41,6 @@ void setCursorOffset(int offset) {
 #include "../../lowlevel/helper.h"
 
 void SC_clearScreen() {
-    HALT
     memset(SC_VIDEO_ADDRESS, 0, SC_NCHARS);
     setCursorOffset(0);
 }
@@ -71,7 +70,6 @@ void SC_printString(char* str) {
 
 void SC_printCharAt(char ch, unsigned int row, unsigned int col, char attribute) {
     
-    HALT
     unsigned char* vidmem = (unsigned char*)SC_VIDEO_ADDRESS;
     // if no attr, use default
     if(attribute == 0) {

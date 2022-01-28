@@ -12,8 +12,7 @@ void setmem() {
 void main() {
     setmem();
     SC_clearScreen();
-        ;setmem();
-    HALT
+        setmem();
     SC_printCharAt('X', 0, 0, 0);
     // SC_printCharAt('X', 0, 0, 0);
     // SC_clearScreen();

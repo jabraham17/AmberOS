@@ -1,4 +1,5 @@
 #include "string.h"
+#include "../lowlevel/helper.h"
 
 void memcpy(void* dst, void* src, unsigned long long n) {
     for(unsigned long long i = 0; i < n; i++) {

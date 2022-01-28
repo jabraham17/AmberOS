@@ -13,6 +13,7 @@ export INCLUDE_DIRECTORY=$(ROOT_PROJECT_DIRECTORY)include/
 export CC=clang
 export AS=nasm
 export LD=/usr/local/opt/llvm/bin/ld.lld
+export OBJCOPY=/usr/local/opt/llvm/bin/llvm-objcopy
 
 export EXTENSION=c
 
