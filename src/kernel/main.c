@@ -15,8 +15,7 @@ void main() {
                    "on the screen because i am so long");
     SC_printString("Separate\n");
 
-        panic(0);
-
+    // panic(0);
 
     return;
 }
