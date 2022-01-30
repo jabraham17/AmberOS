@@ -14,8 +14,7 @@ realpath() {
 }
 SCRIPT_DIR=$(realpath "$(dirname "${BASH_SOURCE[0]}")")
 
-tmux new-session -d -s _qemu \
-"$SCRIPT_DIR/run.sh"
+tmux new-session -d -s _qemu "DEBUG_MODE=1 $SCRIPT_DIR/run.sh"
 
 tmux new-window 
 tmux rename-window "_gdb_window"

@@ -16,14 +16,14 @@ realpath() {
 SCRIPT_DIR=$(realpath "$(dirname "${BASH_SOURCE[0]}")")
 DRIVE=$SCRIPT_DIR/../bin/image.iso
 
-
 # initial setup stuff
 # mkfifo $SCRIPT_DIR/monitor.in $SCRIPT_DIR/monitor.out
 # mkfifo $SCRIPT_DIR/serial.in $SCRIPT_DIR/serial.out
 
 # start detatched qemu
-if [ "$TERM" = "screen" ] && [ -n "$TMUX" ]; then
+if [ $DEBUG_MODE ]; then
 tmux new-window
+EXTRA_ARGS="-s -S"
 else
 tmux new-session -d -s _qemu
 fi
@@ -36,13 +36,15 @@ tmux send "qemu-system-i386 \
 -D $SCRIPT_DIR/runlog.txt \
 -monitor pipe:$SCRIPT_DIR/monitor \
 -serial pipe:$SCRIPT_DIR/serial \
+$EXTRA_ARGS \
 $@ \
 && tmux kill-session -t _qemu" ENTER
 
 
 # open window for debug/log stuff
-if [ "$TERM" = "screen" ] && [ -n "$TMUX" ]; then
+if [ $DEBUG_MODE ] && [ -n "$TMUX" ]; then
 tmux select-window -t "_gdb_window"
+GDB_PANE=$TMUX_PANE
 tmux split-window
 else
 tmux new-window
@@ -58,9 +60,16 @@ tmux split-window -h
 tmux send "tail -f $SCRIPT_DIR/runlog.txt" ENTER
 
 # even distrubute and make visible
-#tmux select-layout even-horizontal
+if [ $DEBUG_MODE ]; then
 tmux select-layout main-horizontal
-#tmux select-layout tiled
+else
+tmux select-layout even-horizontal
+fi
+
+if [ $DEBUG_MODE ]; then
+tmux select-pane -U
+fi
+
 tmux attach
 
 # idle waiting for abort from user
