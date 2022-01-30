@@ -2,6 +2,17 @@
 
 # step instruction and print
 define sip
-stepi
-x/i $pc
+    stepi
+    x/i $pc
 end
+
+# print n instructions on either side of pc
+# print pc context
+# define ppcc
+#    set $n = 1
+#    if $argc == 1
+#        set $n = $arg0
+#    end
+#    x/-$n i $pc
+#    x/$n i $pc
+#end
