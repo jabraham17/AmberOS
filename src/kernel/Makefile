@@ -12,6 +12,8 @@ A_OBJECTS=$(filter-out $(START),$(patsubst %.asm,%_a.o,$(A_SOURCES)))
 DEPENDS=$(patsubst %.c,%.d,$(C_SOURCES))
 DEPENDS+= $(patsubst %.asm,%_a.d,$(A_SOURCES))
 
+INCLUDE= -I$(ROOT_PROJECT_DIRECTORY)src/kernel
+
 TARGET=$(BIN_DIRECTORY)kernel
 
 

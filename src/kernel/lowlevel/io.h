@@ -1,8 +1,7 @@
 #ifndef _KERNEL_LOWLEVEL_IO_H_
 #define _KERNEL_LOWLEVEL_IO_H_
 
-typedef unsigned char byte;
-typedef unsigned short word;
+#include <stdlib/types.h>
 
 byte io_inb(word port);
 void io_outb(word port, byte data);

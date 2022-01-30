@@ -24,8 +24,8 @@ init_32pm:
     mov gs, ax
 
     ; set stack pointer
-    mov ebp, STACK_OFFSET_32
-    mov esp, ebp
+    mov esp, STACK_OFFSET_32
+    xor ebp, ebp
 
     call BEGIN_PM
 

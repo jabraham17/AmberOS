@@ -1,7 +1,7 @@
 
 #include "screen.h"
-#include "../../lowlevel/io.h"
-#include "../../stdlib/string.h"
+#include <lowlevel/io.h>
+#include <stdlib/string.h>
 
 int getScreenOffset(int row, int col) { return 2 * (row * SC_MAX_COLS + col); }
 int getColFromOffset(int offset) {
@@ -27,18 +27,51 @@ int getCursorOffset() {
 }
 void setCursorOffset(int offset) {
     //convert from cell to char
-    offset /= 2;
-
-    //write high bytes
-    io_outb(SC_VGA_CTRL_REGISTER, SC_VGA_OFFSET_HIGH);
-    io_outb(SC_VGA_DATA_REGISTER, (unsigned char) (offset >> 8));
+    int charOffset = offset / 2;
 
     //write low bytes
     io_outb(SC_VGA_CTRL_REGISTER, SC_VGA_OFFSET_LOW);
-    io_outb(SC_VGA_DATA_REGISTER, (unsigned char) (offset & 0xff));
+    io_outb(SC_VGA_DATA_REGISTER, (unsigned char) (charOffset & 0xff));
+
+    //write high bytes
+    io_outb(SC_VGA_CTRL_REGISTER, SC_VGA_OFFSET_HIGH);
+    io_outb(SC_VGA_DATA_REGISTER, (unsigned char) (charOffset >> 8));
+
+    //cursor is moved, we need to set the attribute of this cell
+    unsigned char* vidmem = (unsigned char*)SC_VIDEO_ADDRESS;
+    vidmem[offset + 1] = SC_WHITE_ON_BLACK;
 }
 
-#include "../../lowlevel/helper.h"
+void enableCursor()
+{
+    unsigned char cursorStart = 0;
+    //line size is maxscan line / max rows, we want cursor to take up full line
+    
+    //read Maximum Scan Line Register, this will be cursor end
+    //http://www.osdever.net/FreeVGA/vga/crtcreg.htm#09
+	io_outb(SC_VGA_CTRL_REGISTER, 0x09);
+    unsigned char cursorEnd = io_inb(SC_VGA_DATA_REGISTER) & 0b00011111;
+
+    // read current state of Cursor Start Register
+    //http://www.osdever.net/FreeVGA/vga/crtcreg.htm#0A
+    io_outb(SC_VGA_CTRL_REGISTER, 0x0A);
+    cursorStart |= (io_inb(SC_VGA_DATA_REGISTER) & 0b11000000);
+    //write it back out
+    io_outb(SC_VGA_DATA_REGISTER, cursorStart);
+
+    // read current state of Cursor End Register
+    //http://www.osdever.net/FreeVGA/vga/crtcreg.htm#0B
+    io_outb(SC_VGA_CTRL_REGISTER, 0x0B);
+    cursorEnd |= (io_inb(SC_VGA_DATA_REGISTER) & 0b11100000);
+    //write it back out
+    io_outb(SC_VGA_DATA_REGISTER, cursorEnd);
+}
+
+void SC_init() {
+    //set cursor size and put it at offset 0
+    enableCursor();
+    setCursorOffset(0);
+}
 
 void SC_clearScreen() {
     memset(SC_VIDEO_ADDRESS, 0, SC_NCHARS);
@@ -54,14 +87,16 @@ void SC_printStringAt(char* str, int row, int col) {
     }
     while(*str != '\0') {
         SC_printCharAt(*str, (int)row, (int)col, 0);
-        str++;
         col++;
-        if(col >= SC_MAX_COLS) {
+        //col wraparound or newline
+        if(col >= SC_MAX_COLS || *str == '\n') {
             col = 0;
             row += 1;
         }
+        str++;
     }
-    setCursorOffset(getScreenOffset(row, col));
+    int offset = getScreenOffset(row, col);
+    setCursorOffset(offset);
 }
 void SC_printString(char* str) {
     SC_printStringAt(str, -1, -1);

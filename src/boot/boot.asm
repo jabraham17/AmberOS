@@ -56,7 +56,7 @@ load_kernel:
 
     mov bx, KERNEL_OFFSET
     mov dl, [globals.boot_drive]
-    mov ax, 0x000f ; num sectrs: BE VERY CAREFUL SETTING THIS VALUE
+    mov ax, 0x001F ; num sectrs: BE VERY CAREFUL SETTING THIS VALUE
 
     call disk_load
 

@@ -1,21 +1,22 @@
 
-#include "drivers/screen/screen.h"
-#include "lowlevel/helper.h"
+#include <drivers/screen/screen.h>
+#include <drivers/uart/uart.h>
+#include <lowlevel/io.h>
 
-void setmem() {
-        char* mem = 0xB8000;
-    mem[0] = 'h';
-    mem[2] = 'e';
-    mem[4] = 'l';
-}
+#include <drivers/uart/uart.h>
 
 void main() {
-    setmem();
+
+    SC_init();
     SC_clearScreen();
-        setmem();
-    SC_printCharAt('X', 0, 0, 0);
-    // SC_printCharAt('X', 0, 0, 0);
-    // SC_clearScreen();
-    // SC_printString("Hello, World");
+    SC_printString("Hello, World!\n");
+    SC_printString("Hello, World!\n");
+    SC_printString("I am a really long string that will hopefully wrap around "
+                   "on the screen because i am so long");
+    SC_printString("Separate\n");
+
+        panic(0);
+
+
     return;
 }

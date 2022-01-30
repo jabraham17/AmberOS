@@ -14,6 +14,10 @@
 #define SC_VGA_OFFSET_HIGH 0x0E
 #define SC_VGA_OFFSET_LOW 0x0F
 
+//cursor control: http://www.osdever.net/FreeVGA/vga/crtcreg.htm
+
+void SC_init();
+
 void SC_clearScreen();
 void SC_printStringAt(char* str, int row, int col);
 void SC_printString(char* str);
