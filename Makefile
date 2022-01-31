@@ -19,7 +19,7 @@ export OBJCOPY=/usr/local/opt/llvm/bin/llvm-objcopy
 export EXTENSION=c
 
 ifeq ($(DEBUG),1)
-override CFLAGS+= -DDEBUG=1 -g
+override CFLAGS+= -DDEBUG=1 -g -O0
 else
 override CFLAGS+= -O3
 endif

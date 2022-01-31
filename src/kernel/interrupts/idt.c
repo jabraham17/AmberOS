@@ -1,29 +1,99 @@
 
 #include "idt.h"
+#include <drivers/uart/uart.h>
 #include <stdlib/error.h>
+#include <stdlib/string.h>
 
-void exception_handler() {
-    __asm__ volatile("cli");
-    panic("Exception not handled");
+// list all 32 exceptions
+#define EXCEPTIONS(V)                                                          \
+    V("Divide By Zero", noerr)                                                 \
+    V("Debug", noerr)                                                          \
+    V("NMI", noerr)                                                            \
+    V("Breakpoint", noerr)                                                     \
+    V("Overflow", noerr)                                                       \
+    V("OOB", noerr)                                                            \
+    V("Invalid Opcode", noerr)                                                 \
+    V("Device Not Available", noerr)                                           \
+    V("Double Fault", err)                                                     \
+    V("Coprocessor Segment Overrun", noerr)                                    \
+    V("Invalid TSS", err)                                                      \
+    V("Segment Not Present", err)                                             \
+    V("Stack-Segment Fault", err)                                              \
+    V("GPF", err)                                                              \
+    V("PF", err)                                                               \
+    V("RESERVED", noerr)                                                       \
+    V("x87 FP Exception", noerr)                                               \
+    V("Alignment Check", err)                                                  \
+    V("Machine Check", noerr)                                                  \
+    V("SIMD FP Exception", noerr)                                              \
+    V("Virtualization Exception", noerr)                                       \
+    V("Control Protection Exception", err)                                     \
+    V("RESERVED", noerr)                                                       \
+    V("RESERVED", noerr)                                                       \
+    V("RESERVED", noerr)                                                       \
+    V("RESERVED", noerr)                                                       \
+    V("RESERVED", noerr)                                                       \
+    V("RESERVED", noerr)                                                       \
+    V("Hypervisor Injection Exception", noerr)                                 \
+    V("VMM Communication Exception", noerr)                                    \
+    V("Security Exception", err)                                               \
+    V("RESERVED", noerr)
+
+#define MAKE_EXCEPTION_NAME(name, type) name,
+
+char* exception_stub_table_names[IDT_CPU_EXCEPTION_COUNT] = {
+    EXCEPTIONS(MAKE_EXCEPTION_NAME)};
+
+
+typedef struct {
+    uint32_t EDI, ESI, EBP, ESP, EBX, EDX, ECX, EAX;
+    uint32_t eip, cs, efl, useresp, ss;
+} exception_isr_state_t;
+
+
+void exception_handler(uint32_t exceptionID, exception_isr_state_t* isr) {
+    uart_puts("Exception occurred: ");
+
+    uart_putc('\'');
+    uart_puts(exception_stub_table_names[exceptionID]);
+    uart_putc('\'');
+    uart_putc('\n');
+
+    char buf[11];
+
+    itoh(exceptionID, buf);
+    uart_puts("ID: ");
+    uart_puts(buf);
+    uart_putc('\n');
+
+    itoh(isr->eip, buf);
+    uart_puts("EIP: ");
+    uart_puts(buf);
+    uart_putc('\n');
 }
 
+extern void* exception_stub_table[IDT_CPU_EXCEPTION_COUNT];
+
+#undef MAKE_EXCEPTION_NAME
+#undef EXCEPTIONS
+
 // idt table
-__attribute__((aligned(16))) static idt_entry_t idt[IDT_MAX_DESCRIPTORS];
+__attribute__((aligned(16))) idt_entry_t idt[IDT_MAX_DESCRIPTORS];
 
 // idt table ref struct
-static idtr_t idtr;
-
-// refercne asm stub table
-extern void** isr_stub_table;
+idtr_t idtr;
 
 void idt_init() {
     // setup base pointer
     idtr.base = (uint32_t)idt;
     idtr.limit = (uint16_t)sizeof(idt_entry_t) * IDT_MAX_DESCRIPTORS - 1;
 
-    // init first 32 as stubs
-    for(uint8_t vector = 0; vector < 32; vector++) {
-        idt_set_descriptor(vector, isr_stub_table[vector], 0x8E);
+    // init first 32 as stubs for exceptions
+    for(uint8_t vector = 0; vector < IDT_CPU_EXCEPTION_COUNT; vector++) {
+        idt_set_descriptor(
+            vector, exception_stub_table[vector],
+            IDT_DESCRIPTOR_X32_INTERRUPT | IDT_DESCRIPTOR_PRESENT |
+                IDT_DESCRIPTOR_RING3);
     }
 
     // load the idt and enable interrupts
