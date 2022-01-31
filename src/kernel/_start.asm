@@ -17,7 +17,11 @@ _start:
     xor ebp, ebp
 
     ; init idt for interrupts
-    call idt_init
+    ;call idt_init
+
+   
+
+    cli
 
     call main
     jmp $

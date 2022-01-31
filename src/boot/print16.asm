@@ -11,6 +11,7 @@ WHITE_ON_BLACK equ 0x0f
 ; 0xb8000 + 2 * (row * 80 + col)
 
 clear_screen_16:
+%if 1
     pusha
     push es
 
@@ -31,10 +32,12 @@ clear_screen_16:
 
     pop es
     popa
+%endif
     ret
 
 ; ax has pointer to null string
 print_str_16:
+%if 1
     pusha
     push es
 
@@ -79,6 +82,7 @@ print_str_16:
 
     pop es
     popa
+%endif
     ret
 
 ; ax conatins the hex value to be printed

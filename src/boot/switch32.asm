@@ -34,6 +34,6 @@ BEGIN_PM:
     mov eax, strings.pm_mode
     call print_str_32
     call KERNEL_OFFSET
-    ;jmp $
+    ; never return here
 
 %endif

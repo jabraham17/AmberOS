@@ -14,6 +14,7 @@ isr_exception_%+%1:
     push %1
     call exception_handler
     add esp, 8 ; pop nowhere
+    sti
     popad
     iret
 %endmacro

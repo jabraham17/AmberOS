@@ -16,9 +16,9 @@ void main() {
                    "on the screen because i am so long");
     SC_printString("Separate\n");
 
-    /*while(!(io_inb(0x64)& 0b00000001));
-    char b = io_inb(0x60);
-    SC_printString("Got CHar\n");*/
+    // while(!(io_inb(0x64)& 0b00000001));
+    // char b = io_inb(0x60);
+    // SC_printString("Got CHar\n");
 
     //__asm__ volatile ("1:jmp 1b");
 
