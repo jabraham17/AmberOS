@@ -1,5 +1,5 @@
-%ifndef _IC_SWITCH32_ASM_
-%define _IC_SWITCH32_ASM_
+%ifndef _IC_STAGE1_SWITCH32_ASM_
+%define _IC_STAGE1_SWITCH32_ASM_
 
 bits 16
 switch_32pm:

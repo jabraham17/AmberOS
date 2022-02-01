@@ -1,5 +1,5 @@
-%ifndef _IC_PRINT32_ASM_
-%define _IC_PRINT32_ASM_
+%ifndef _IC_HELPER_PRINT32_ASM_
+%define _IC_HELPER_RINT32_ASM_
 bits 32
 
 VIDEO_MEMORY equ 0xb8000
@@ -8,27 +8,27 @@ COLS equ 80
 NCHARS equ ROWS*COLS
 WHITE_ON_BLACK equ 0x0f
 
-; clear_screen_32:
-;     pusha
+clear_screen_32:
+    pusha
 
-;     mov edx, VIDEO_MEMORY
-;     mov ecx, NCHARS
-;     ; each char is 2 bytes
-;     ; we can write 4 bytes at a time
-;     ; so we can divide NCHARS by 2
-;     shr ecx, 1
+    mov edx, VIDEO_MEMORY
+    mov ecx, NCHARS
+    ; each char is 2 bytes
+    ; we can write 4 bytes at a time
+    ; so we can divide NCHARS by 2
+    shr ecx, 1
 
-;     .loop_top:
-;     cmp ecx, 0
-;     je .loop_bottom
-;     mov dword [edx], 0
-;     add edx, 4
-;     sub ecx, 1
-;     jmp .loop_top
-;     .loop_bottom:
+    .loop_top:
+    cmp ecx, 0
+    je .loop_bottom
+    mov dword [edx], 0
+    add edx, 4
+    sub ecx, 1
+    jmp .loop_top
+    .loop_bottom:
 
-;     popa
-;     ret
+    popa
+    ret
 
 ; eax has pointer to null string
 print_str_32:
@@ -74,7 +74,6 @@ print_str_32:
 
 ; eax conatins the hex value to be printed
 print_hex_32:
-%if 0
     pusha
 
     ; loop 8 times for 8 hex values
@@ -121,8 +120,5 @@ print_hex_32:
     ret
     .hex_string: db "0x00000000",0
     .mask: dd 0x0000000F
-%else
-ret
-%endif
 
 %endif

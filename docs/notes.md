@@ -18,3 +18,4 @@ for some reason, if there is more than ~400~ bytes of stuff in boot.bin, fails t
   - https://wiki.osdev.org/Partition_Table
   - https://wiki.osdev.org/GPT
   - https://wiki.osdev.org/MBR_(x86)
+

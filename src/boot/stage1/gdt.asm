@@ -1,5 +1,5 @@
-%ifndef _IC_GDT_ASM_
-%define _IC_GDT_ASM_
+%ifndef _IC_STAGE1_GDT_ASM_
+%define _IC_STAGE1_GDT_ASM_
 gdt_def:
 .gdt_start:
 

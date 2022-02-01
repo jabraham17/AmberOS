@@ -1,5 +1,5 @@
-%ifndef _IC_PRINT16_ASM_
-%define _IC_PRINT16_ASM_
+%ifndef _IC_HELPER_PRINT16_ASM_
+%define _IC_HELPER_PRINT16_ASM_
 bits 16
 
 ; because of segement register, if we put this in es we it is extended to full 0xb8000
@@ -11,7 +11,6 @@ WHITE_ON_BLACK equ 0x0f
 ; 0xb8000 + 2 * (row * 80 + col)
 
 clear_screen_16:
-%if 1
     pusha
     push es
 
@@ -32,12 +31,10 @@ clear_screen_16:
 
     pop es
     popa
-%endif
     ret
 
 ; ax has pointer to null string
 print_str_16:
-%if 1
     pusha
     push es
 
@@ -82,12 +79,10 @@ print_str_16:
 
     pop es
     popa
-%endif
     ret
 
 ; ax conatins the hex value to be printed
 print_hex_16:
-%if 0
     pusha
 
     ; loop 4 times for 4 hex values
@@ -134,8 +129,5 @@ print_hex_16:
     ret
     .hex_string: db "0x0000",0
     .mask: dw 0x000F
-%else
-ret
-%endif
 
 %endif

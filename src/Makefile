@@ -11,18 +11,16 @@ all: $(TARGET)
 	@:
 
 $(TARGET): $(BOOT_BIN) $(KERNEL_BIN) Makefile
-	dd if=/dev/zero of=$@ bs=512 count=$(NSECTORS) 2>/dev/null
-	dd if=$(BOOT_BIN) of=$@ conv=notrunc bs=512 seek=0 count=1 2>/dev/null
-	dd if=$(KERNEL_BIN) of=$@ conv=notrunc bs=512 seek=1 count=$(KERNEL_NSECTORS) 2>/dev/null
+	cat $(BOOT_BIN) $(KERNEL_BIN) > $@
+	$(BUILD_SCRIPT_DIRECTORY)pad.sh $@ $(NSECTORS)
 
 $(BOOT_BIN): Makefile
 	@echo "make --directory=boot"
 	@$(MAKE) --directory=boot
-# known limitation: requires two "make -B" for kernel size to be correctly calculated
+
 $(KERNEL_BIN): Makefile
 	@echo "make --directory=kernel"
 	@$(MAKE) --directory=kernel
-	$(eval KERNEL_NSECTORS=$(shell expr $(shell wc -c <$(KERNEL_BIN)) / 512 + 1))
 	
 
 .PHONY: clean
