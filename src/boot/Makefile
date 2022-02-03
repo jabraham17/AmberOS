@@ -17,7 +17,7 @@ all: $(TARGET)
 
 .PHONY: clean
 clean:
-	$(RM) $(TARGET) $(DEPENDS)
+	$(RM) $(TARGET) $(BINARIES) $(DEPENDS)
 
 $(TARGET): $(BINARIES) Makefile
 	cat $(BINARIES) > $@
