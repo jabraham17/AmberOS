@@ -4,8 +4,9 @@
 #define SC_VIDEO_ADDRESS ((void*)0xB8000)
 #define SC_MAX_ROWS 25
 #define SC_MAX_COLS 80
-#define SC_NCELLS SC_MAX_ROWS*SC_MAX_COLS
-#define SC_NCHARS SC_NCELLS*2
+#define SC_NCELLS (SC_MAX_ROWS*SC_MAX_COLS)
+#define SC_NCHARS (SC_NCELLS*2)
+#define SC_ROWSIZE (SC_MAX_COLS*2)
 // Attribute byte for our default colour scheme.
 #define SC_WHITE_ON_BLACK 0x0F
 // Screen device I/O ports

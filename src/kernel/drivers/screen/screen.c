@@ -93,6 +93,9 @@ void SC_printStringAt(char* str, int row, int col) {
             col = 0;
             row += 1;
         }
+        if(row >= SC_MAX_ROWS) {
+            row = SC_MAX_ROWS-1; //max out row
+        }
         str++;
     }
     int offset = getScreenOffset(row, col);
@@ -102,6 +105,22 @@ void SC_printString(char* str) {
     SC_printStringAt(str, -1, -1);
 }
 
+void scroller() {
+    unsigned char* vidmem = (unsigned char*)SC_VIDEO_ADDRESS;
+    // copy 1:MAX_ROWS-1 lines to 0:MAX_ROWS-2 lines, set cursor to start of last line
+    int srcOffset = getScreenOffset(1, 0);
+    int dstOffset = getScreenOffset(0, 0);
+    int nBytes = SC_ROWSIZE * (SC_MAX_ROWS-1);
+    //because ptrs overlap, must use memmove
+    memmove(vidmem + dstOffset, vidmem + srcOffset, nBytes);
+
+    // clear last line
+    int lastLineOffset = getScreenOffset(SC_MAX_ROWS-1, 0);
+    memset(vidmem + lastLineOffset, 0, SC_ROWSIZE);
+
+    //set cursor
+    setCursorOffset(lastLineOffset);
+}
 
 void SC_printCharAt(char ch, unsigned int row, unsigned int col, char attribute) {
     
@@ -124,5 +143,10 @@ void SC_printCharAt(char ch, unsigned int row, unsigned int col, char attribute)
     else {
         offset = getScreenOffset(getRowFromOffset(offset)+1, 0);
     }
+
+    if(offset >= SC_NCHARS) {
+        scroller();
+    }
+
 }
 

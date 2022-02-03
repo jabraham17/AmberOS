@@ -5,6 +5,19 @@ void memcpy(void* dst, void* src, size_t n) {
         ((char*)dst)[i] = ((char*)src)[i];
     }
 }
+void memmove(void* dst, void* src, size_t n) {
+    if(dst < src) {
+        // forward copy
+        for(size_t i = 0; i < n; i++) {
+            ((char*)dst)[i] = ((char*)src)[i];
+        }
+    } else {
+        // backwards copy
+        for(; n > 0; n--) {
+            ((char*)dst)[n - 1] = ((char*)src)[n - 1];
+        }
+    }
+}
 void memset(void* dst, uint8_t v, size_t n) {
     for(size_t i = 0; i < n; i++) {
         ((char*)dst)[i] = v;
@@ -34,8 +47,7 @@ char getHexDigit(byte b) {
         return b + 0x30;
     } else if(b <= 0xF) {
         return b + (0x41 - 0xA);
-    }
-    else {
+    } else {
         return 'X';
     }
 }
