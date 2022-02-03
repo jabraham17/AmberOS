@@ -22,6 +22,9 @@ void SC_init();
 void SC_clearScreen();
 void SC_printStringAt(char* str, int row, int col);
 void SC_printString(char* str);
+void SC_printf(char* fmt, ...);
 void SC_printCharAt(char ch, unsigned int row, unsigned int col, char attribute);
+
+
 
 #endif

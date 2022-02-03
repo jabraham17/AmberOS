@@ -78,33 +78,6 @@ void SC_clearScreen() {
     setCursorOffset(0);
 }
 
-void SC_printStringAt(char* str, int row, int col) {
-    //not valid, print from cursor
-    if(row < 0 || col < 0) {
-        int offset = getCursorOffset();
-        row = getRowFromOffset(offset);
-        col = getColFromOffset(offset);
-    }
-    while(*str != '\0') {
-        SC_printCharAt(*str, (int)row, (int)col, 0);
-        col++;
-        //col wraparound or newline
-        if(col >= SC_MAX_COLS || *str == '\n') {
-            col = 0;
-            row += 1;
-        }
-        if(row >= SC_MAX_ROWS) {
-            row = SC_MAX_ROWS-1; //max out row
-        }
-        str++;
-    }
-    int offset = getScreenOffset(row, col);
-    setCursorOffset(offset);
-}
-void SC_printString(char* str) {
-    SC_printStringAt(str, -1, -1);
-}
-
 void scroller() {
     unsigned char* vidmem = (unsigned char*)SC_VIDEO_ADDRESS;
     // copy 1:MAX_ROWS-1 lines to 0:MAX_ROWS-2 lines, set cursor to start of last line
@@ -122,6 +95,52 @@ void scroller() {
     setCursorOffset(lastLineOffset);
 }
 
+
+void SC_printStringAt(char* str, int row, int col) {
+    //not valid, print from cursor
+    if(row < 0 || col < 0) {
+        int offset = getCursorOffset();
+        row = getRowFromOffset(offset);
+        col = getColFromOffset(offset);
+    }
+    while(*str != '\0') {
+        if(*str == '\t') {
+            col += 4; //tab size is 4
+        }
+        else if(*str == '\n') {
+            col = 0;
+            row += 1;
+        }
+        else {
+            SC_printCharAt(*str, (int)row, (int)col, 0);
+            col++;
+        }
+        //wraparound
+        if(col >= SC_MAX_COLS) {
+            col = col - SC_MAX_COLS;
+            row += 1;
+        }
+        if(row >= SC_MAX_ROWS) {
+            row = SC_MAX_ROWS-1; //max out row
+            scroller();
+        }
+        str++;
+    }
+    int offset = getScreenOffset(row, col);
+    setCursorOffset(offset);
+}
+void SC_printString(char* str) {
+    SC_printStringAt(str, -1, -1);
+}
+
+char printf_buffer[1024];
+void SC_printf(char* fmt, ...) {
+    va_list args;
+    va_start(args, fmt);
+    vsprintf(printf_buffer, fmt, args);
+    va_end();
+    SC_printString(printf_buffer);
+}
 void SC_printCharAt(char ch, unsigned int row, unsigned int col, char attribute) {
     
     unsigned char* vidmem = (unsigned char*)SC_VIDEO_ADDRESS;

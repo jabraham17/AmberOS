@@ -28,14 +28,11 @@ struct stackframe {
 void stacktrace(char* buffer, size_t nbuffer, size_t maxFrames) {
     struct stackframe* stk;
     __asm__ volatile("movl %%ebp,%0 \n " : "+r"(stk));
-    char hexBuf[11];
     char* bufEnd = buffer + nbuffer;
     for(size_t frame = 0; stk != 0 && frame < maxFrames && buffer < bufEnd;
         frame++) {
-        itoh((int32_t)stk->eip, hexBuf);      // get hex digit
-        strncpy(buffer, hexBuf, 10); // dont copy null
-        buffer[10] = '\n';
-        buffer += 11;
+        size_t l = sprintf(buffer, "%x\n", (int32_t)stk->eip);
+        buffer += l;
         stk = stk->ebp;
     }
 }
