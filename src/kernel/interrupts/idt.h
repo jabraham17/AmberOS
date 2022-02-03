@@ -31,11 +31,6 @@ typedef struct {
     uint32_t base;
 } __attribute__((packed)) idtr_t;
 
-struct interrupt_frame;
-
-#define MAKE_ISR(funcname)                                                     \
-    __attribute__((interrupt)) void _isr_##funcname(                           \
-        struct interrupt_frame* frame)
 
 void idt_set_descriptor(uint8_t vector, void* isr, uint8_t flags);
 void idt_init();

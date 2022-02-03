@@ -25,7 +25,7 @@ jmp _mbr_start_old
     reserved:          db    0
     signature:         db    0x29
     volumeID:          dd    0x2d7e5a1a
-    volumeLabel:       db    "NO NAME    "
+    volumeLabel:       db    "CUSTOM-OS  "
     fileSysType:       db    "FAT12   "
 
 

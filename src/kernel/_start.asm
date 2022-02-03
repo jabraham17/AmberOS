@@ -8,6 +8,8 @@ bits 32
 %endif
 
 extern idt_init
+extern pic_init
+extern isr_init
 extern main
 global _start
 _start:
@@ -16,12 +18,10 @@ _start:
     mov esp, STACK_OFFSET_32
     xor ebp, ebp
 
-    ; init idt for interrupts
-    ;call idt_init
-
-   
-
-    cli
+    ; init idt for interrupts, this also calls sti
+    call idt_init
+    call pic_init
+    call isr_init
 
     call main
     jmp $
