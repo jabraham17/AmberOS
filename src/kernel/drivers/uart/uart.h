@@ -16,6 +16,8 @@
 void uart_putc(char ch);
 void uart_puts(char* str);
 
+void uart_printf(char* fmt, ...);
+
 void uart_putc_port(word port, char ch);
 void uart_puts_port(word port, char* str);
 

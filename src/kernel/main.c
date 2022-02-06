@@ -6,10 +6,11 @@
 
 void main() {
     SC_init();
+    SC_clearScreen();
+
     kb_init();
 
 
-    SC_clearScreen();
     SC_printString("Hello, World!\n");
     SC_printString("I am running in the kernel!!!\n");
     SC_printString("Hello, World!\n");

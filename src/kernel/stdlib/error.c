@@ -7,12 +7,10 @@ void panic(char* msg) {
         uart_puts(msg);
     }
 #if defined(DEBUG) && DEBUG == 1
-    uart_puts("stacktrace\n");
     char buffer[201]; // one extra so stacktrace doesnt overwrite nul char
     memset(buffer, 0, 201);
     stacktrace(buffer, 200, 10);
-    uart_puts(buffer);
-    uart_putc('\n');
+    uart_printf("\nstack trace %s\n");
 #endif
     HALT
 }

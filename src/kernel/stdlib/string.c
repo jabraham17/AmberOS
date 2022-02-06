@@ -152,6 +152,13 @@ size_t vsprintf(char* buffer, char* fmt, va_list args) {
                     fmt++;
                     break;
                 }
+                case 'b': {
+                    int b = (va_arg(args, int)) & size_mask;
+                    size_t l = itoa(b, buffer, 2);
+                    buffer += l; // move buffer after
+                    fmt++;
+                    break;
+                }
                 case 'x': {
                     int x = (va_arg(args, int)) & size_mask;
                     size_t l = itoa(x, buffer, 16);

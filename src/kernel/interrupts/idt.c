@@ -51,12 +51,10 @@ typedef struct {
 } exception_isr_state_t;
 
 
-char exception_buf[128];
 
 void exception_handler(uint32_t exceptionID, exception_isr_state_t* isr) {
 
-    sprintf(exception_buf, "Exception occurred: \'%s\'\nID: %d\nEIP: 0x%x\n", exception_stub_table_names[exceptionID], exceptionID, isr->eip);
-    uart_puts(exception_buf);
+    uart_printf("Exception occurred: \'%s\'\nID: %d\nEIP: 0x%x\n", exception_stub_table_names[exceptionID], exceptionID, isr->eip);
 }
 
 extern void* exception_stub_table[IDT_CPU_EXCEPTION_COUNT];
