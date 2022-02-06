@@ -8,7 +8,7 @@ void main() {
     SC_init();
     SC_clearScreen();
 
-    kb_init();
+    //kb_init();
 
 
     SC_printString("Hello, World!\n");

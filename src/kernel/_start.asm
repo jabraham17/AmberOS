@@ -13,7 +13,6 @@ extern isr_init
 extern main
 global _start
 _start:
-
     ; reset up stack
     mov esp, STACK_OFFSET_32
     xor ebp, ebp

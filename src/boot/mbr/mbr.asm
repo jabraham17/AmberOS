@@ -62,7 +62,7 @@ _disk_load:
     ; https://en.wikipedia.org/wiki/INT_13H#INT_13h_AH=02h:_Read_Sectors_From_Drive 
     mov ah, 0x02
     ;mov al, byte [bx + pt_entry_t.nsectors] ; load only the lowest byte of nsectors
-    mov al, 2
+    mov al, STAGE1_NSECTORS
     mov ch, 0 ; default
     ;mov cl, byte [bx + pt_entry_t.lba_start] ; load only the lowest byte of lba start
     mov cl, 2
@@ -77,7 +77,7 @@ _disk_load:
     jc .error ; if error
     pop bx
     ;cmp al, byte [bx + pt_entry_t.nsectors] ; did we read enough?
-    cmp al, 2
+    cmp al, STAGE1_NSECTORS
     jne .error
 
     ; success, jump to bootloader

@@ -23,10 +23,7 @@ jmp _boot
 %include "helper/print32.asm"
 %include "stage1/gdt.asm"
 %include "stage1/switch32.asm"
-
-; pad and boot signal for first section
-times (510-($-$$)) db 0
-dw 0xaa55
+%include "stage1/a20.asm"
 
 bits 16
 _boot:
@@ -43,23 +40,18 @@ _boot:
     mov sp, bp
 
     call clear_screen_16
-
-
     mov ax, strings.real_mode
     call print_str_16
 
-    call load_kernel
+    call enable_a20
 
+    call load_kernel
     mov ax, strings.load_kernel
     call print_str_16
 
     mov ax, strings.switch_pm_mode
     call print_str_16
-
-    call switch_32pm
-
-    ; should never get here
-    jmp $ ; halt
+    jmp switch_32pm
 
 
 load_kernel:
@@ -74,7 +66,7 @@ load_kernel:
     ;mov dl, 0
     mov dl, byte [globals.boot_drive]
     mov ax, 0x001F ; num sectrs: BE VERY CAREFUL SETTING THIS VALUE
-    mov cl, 0x04
+    mov cl, (0x02 + STAGE1_NSECTORS)
 
     call disk_load
 
@@ -91,9 +83,5 @@ strings:
 globals:
     .boot_drive: db 0
     .current_screen_row: db 0
-
-; pad and boot signal for second section
-times (1022-($-$$)) db 0
-dw 0xaa55
 
 %endif

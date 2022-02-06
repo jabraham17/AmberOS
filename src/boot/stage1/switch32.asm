@@ -27,13 +27,13 @@ init_32pm:
     mov esp, STACK_OFFSET_32
     xor ebp, ebp
 
-    call BEGIN_PM
+    jmp BEGIN_PM
 
 bits 32
 BEGIN_PM:
     mov eax, strings.pm_mode
     call print_str_32
-    call KERNEL_OFFSET
+    jmp KERNEL_OFFSET
     ; never return here
 
 %endif
