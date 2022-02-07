@@ -1,15 +1,19 @@
 
-#include <drivers/screen/screen.h>
 #include <drivers/keyboard/keyboard.h>
+#include <drivers/screen/screen.h>
 
 #include <stdlib/string.h>
 
 void main() {
     SC_init();
+    //#define TERM_COLOR VGA_COLOR_GREEN, VGA_COLOR_DARK_GREY
+    //#define TERM_COLOR VGA_COLOR_WHITE, VGA_COLOR_DARK_GREY
+    #define TERM_COLOR VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK
+    SC_setGlobalAttribute(TERM_COLOR);
+    SC_setCursorAttribute(TERM_COLOR);
     SC_clearScreen();
 
-    //kb_init();
-
+    // kb_init();
 
     SC_printString("Hello, World!\n");
     SC_printString("I am running in the kernel!!!\n");
@@ -20,11 +24,19 @@ void main() {
     SC_printString("Lets put some tabs\tin here to see how it gets handled\t");
     SC_printString("now we start a new\tsection\n");
 
-    SC_printf("hello my name is %%%s%% and my favorite number is %d, which in hex is 0x%x", "steven", 17, 0x11);
+    SC_printf(
+        "hello my name is %%%s%% and my favorite number is %d, which in hex is "
+        "0x%x",
+        "steven", 17, 0x11);
 
     int big_hex = 0xDEADBEEF;
-    SC_printf("\nReally big hex number 0x%hhx, 0x%hx, 0x%x\n", big_hex, big_hex, big_hex);
+    SC_printf(
+        "\nReally big hex number 0x%hhx, 0x%hx, 0x%x\n", big_hex, big_hex,
+        big_hex);
 
+#if defined(DEBUG) && DEBUG == 1
+    SC_debugColorMatrix();
+#endif
 
     return;
 }
