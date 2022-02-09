@@ -4,11 +4,28 @@
 
 #include <stdlib/string.h>
 
+void rdmsr(uint32_t code, uint32_t* edx, uint32_t* eax) {
+    __asm__ volatile("rdmsr" : "=a"(*eax), "=d"(*edx) : "c"(code) :);
+}
+void wrmsr(uint32_t code, uint32_t edx, uint32_t eax) {
+    __asm__ volatile("wrmsr" : : "c"(code), "a"(eax), "d"(edx) :);
+}
+
+void cpuid(uint32_t* eax, uint32_t* ebx, uint32_t* ecx, uint32_t* edx) {
+    __asm__ volatile("cpuid"
+                     : /*"=a"(*eax), "=b"(*ebx),*/ "=c"(*ecx) /*, "=d"(*edx)*/
+                     : "a"(*eax)                              //, "c"(*ecx)
+                     :);
+}
+void rdtsc(uint32_t* low, uint32_t* high) {
+    __asm__ volatile("rdtsc" : "=a"(*low), "=d"(*high));
+}
+
 void main() {
     SC_init();
-    //#define TERM_COLOR VGA_COLOR_GREEN, VGA_COLOR_DARK_GREY
-    //#define TERM_COLOR VGA_COLOR_WHITE, VGA_COLOR_DARK_GREY
-    #define TERM_COLOR VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK
+//#define TERM_COLOR VGA_COLOR_GREEN, VGA_COLOR_DARK_GREY
+//#define TERM_COLOR VGA_COLOR_WHITE, VGA_COLOR_DARK_GREY
+#define TERM_COLOR VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK
     SC_setGlobalAttribute(TERM_COLOR);
     SC_setCursorAttribute(TERM_COLOR);
     SC_clearScreen();
