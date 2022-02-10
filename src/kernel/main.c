@@ -2,6 +2,11 @@
 #include <drivers/keyboard/keyboard.h>
 #include <drivers/screen/screen.h>
 
+#include <interrupts/idt.h>
+#include <interrupts/isr.h>
+#include <interrupts/pic.h>
+#include <interrupts/timers.h>
+
 #include <stdlib/string.h>
 
 void rdmsr(uint32_t code, uint32_t* edx, uint32_t* eax) {
@@ -13,8 +18,8 @@ void wrmsr(uint32_t code, uint32_t edx, uint32_t eax) {
 
 void cpuid(uint32_t* eax, uint32_t* ebx, uint32_t* ecx, uint32_t* edx) {
     __asm__ volatile("cpuid"
-                     : /*"=a"(*eax), "=b"(*ebx),*/ "=c"(*ecx) /*, "=d"(*edx)*/
-                     : "a"(*eax)                              //, "c"(*ecx)
+                     : "=a"(*eax), "=b"(*ebx), "=c"(*ecx), "=d"(*edx)
+                     : "a"(*eax), "c"(*ecx)
                      :);
 }
 void rdtsc(uint32_t* low, uint32_t* high) {
@@ -27,7 +32,7 @@ void kernel_main() {
     pic_init();
     isr_init();
 
-    //pit_init(50);
+    pit_init(50); //50hz clock
 
     SC_init();
 
@@ -39,7 +44,7 @@ void kernel_main() {
     SC_setCursorAttribute(TERM_COLOR);
     SC_clearScreen();
 
-    kb_init();
+    //kb_init();
 
     SC_printString("Hello, World!\n");
     SC_printString("I am running in the kernel!!!\n");

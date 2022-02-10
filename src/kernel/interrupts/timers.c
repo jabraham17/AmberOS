@@ -13,7 +13,7 @@ uint32_t pit_tick = 0;
 void pit_isr() { 
     pit_tick++;
     #if defined(DEBUG) && DEBUG == 1
-    //uart_printf("Tick: %d\n", pit_tick);
+    uart_printf("Tick: %d\n", pit_tick);
     #endif 
  }
 
