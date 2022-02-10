@@ -2,7 +2,8 @@
 
 override CFLAGS+= -ffreestanding -m32 --target=i386-unknown-linux-gnu
 override CFLAGS+= -mno-sse
-override LDFLAGS+= -Ttext $(KERNEL_OFFSET)
+override LDFLAGS+= 
+#-Ttext $(KERNEL_OFFSET)
 
 C_SOURCES=$(wildcard *.c) $(wildcard */*.c) $(wildcard */*/*.c)
 C_OBJECTS=$(patsubst %.c,%.o,$(C_SOURCES))
@@ -32,7 +33,7 @@ $(TARGET).bin: $(TARGET).elf
 	$(OBJCOPY) -O binary $< $@
 
 $(TARGET).elf: $(START) $(C_OBJECTS) $(A_OBJECTS) Makefile
-	$(LD) $(START) $(C_OBJECTS) $(A_OBJECTS) $(LDFLAGS) $(LDLIBS) -o $@
+	$(LD) $(START) $(C_OBJECTS) $(A_OBJECTS) $(LDFLAGS) $(LDLIBS) -T$(ROOT_PROJECT_DIRECTORY)build-scripts/link.ld -o $@
 
 %.o: %.c Makefile
 	$(CC) $(CFLAGS) $(DEPENFLAGS) $(INCLUDE) -c $< -o $@

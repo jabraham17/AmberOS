@@ -22,7 +22,7 @@ bits 32
     mov fs, ax
     mov gs, ax
     mov ss, ax
-
+    jmp $
     jmp KERNEL_OFFSET ; we never return here
 
 %endif
