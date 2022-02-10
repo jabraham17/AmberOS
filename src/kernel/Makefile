@@ -38,7 +38,7 @@ $(TARGET).elf: $(START) $(C_OBJECTS) $(A_OBJECTS) Makefile
 	$(CC) $(CFLAGS) $(DEPENFLAGS) $(INCLUDE) -c $< -o $@
 
 %_a.o: %.asm Makefile
-	@$(AS) -M $< > $(patsubst %.asm,%_a.d,$<)
-	$(AS) -felf $(CONSTANTS) $< -o $@
+#@$(AS) -M $< > $(patsubst %.asm,%_a.d,$<)
+	$(AS) -f elf $(CONSTANTS) $< -o $@ -MD $(patsubst %.asm,%.d,$<)
 
 -include $(DEPENDS)

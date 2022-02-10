@@ -6,7 +6,7 @@ bits 32
 extern exception_handler
 
 %macro isr_exception 1
-isr_exception_%+%1:
+isr_exception_%1:
     pushad
     cld ; C code following the sysV ABI requires DF to be clear on function entry
     cli
@@ -25,11 +25,15 @@ isr_exception i
 %assign i i+1 
 %endrep
 
+%macro make_isr_exception_entry 1
+    dd isr_exception_%1
+%endmacro 
+
 global exception_stub_table
 exception_stub_table:
 %assign i 0 
 %rep 32 
-    dd isr_exception_%+i
+    make_isr_exception_entry i
 %assign i i+1 
 %endrep
 
@@ -38,7 +42,7 @@ exception_stub_table:
 extern pic_send_EOI
 
 %macro isr_pic 1
-isr_pic_%+%1:
+isr_pic_%1:
     pushad
     cld
     cli
@@ -75,11 +79,15 @@ pic_isr_handlers:
 %endrep
 
 
+%macro make_isr_pic_entry 1
+    dd isr_pic_%1
+%endmacro 
+
 global pic_isr_stub_table
 pic_isr_stub_table:
 %assign i 0 
 %rep 16
-    dd isr_pic_%+i
+    make_isr_pic_entry i
 %assign i i+1 
 %endrep
 
