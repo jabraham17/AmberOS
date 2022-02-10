@@ -14,7 +14,7 @@ realpath() {
 }
 
 SCRIPT_DIR=$(realpath "$(dirname "${BASH_SOURCE[0]}")")
-DRIVE=$SCRIPT_DIR/../bin/image.iso
+DRIVE=$SCRIPT_DIR/../bin/custom-os.iso
 
 # initial setup stuff
 # mkfifo $SCRIPT_DIR/monitor.in $SCRIPT_DIR/monitor.out
@@ -30,7 +30,7 @@ fi
 
 tmux rename-window "_qemu_window"
 tmux send "qemu-system-i386 \
--drive format=raw,file=$DRIVE \
+-cdrom $DRIVE \
 -no-reboot \
 -d int,cpu_reset \
 -D $SCRIPT_DIR/runlog.txt \

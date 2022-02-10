@@ -6,10 +6,8 @@ SUBDIRS=src
 MKFILE_PATH=$(abspath $(lastword $(MAKEFILE_LIST)))
 MKFILE_DIR=$(dir $(MKFILE_PATH))
 export ROOT_PROJECT_DIRECTORY=$(MKFILE_DIR)
-export LIB_DIRECTORY=$(ROOT_PROJECT_DIRECTORY)lib/
 export BIN_DIRECTORY=$(ROOT_PROJECT_DIRECTORY)bin/
 export SCRIPT_DIRECTORY=$(ROOT_PROJECT_DIRECTORY)scripts/
-export INCLUDE_DIRECTORY=$(ROOT_PROJECT_DIRECTORY)include/
 export BUILD_SCRIPT_DIRECTORY=$(ROOT_PROJECT_DIRECTORY)build-scripts/
 
 export CC=clang
@@ -31,8 +29,8 @@ override CFLAGS+= -std=c11
 override ASFLAGS+=
 
 override LDFLAGS+=
-override LDFLAGS+= -L$(LIB_DIRECTORY)
-override INCLUDE+= -I$(INCLUDE_DIRECTORY)
+override LDFLAGS+=
+override INCLUDE+=
 
 
 export CFLAGS
@@ -44,17 +42,14 @@ export DEPENFLAGS= -MMD -MP
 
 .PHONY: $(TOPTARGETS)
 
-all: $(LIB_DIRECTORY) $(BIN_DIRECTORY)
+all: $(BIN_DIRECTORY)
 	@:
-
-$(LIB_DIRECTORY): 
-	@mkdir -p $@
 
 $(BIN_DIRECTORY):
 	@mkdir -p $@
 
 clean:
-	$(RM) -r $(LIB_DIRECTORY) $(BIN_DIRECTORY)
+	$(RM) -r $(BIN_DIRECTORY)
 
 $(TOPTARGETS): $(SUBDIRS)
 

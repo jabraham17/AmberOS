@@ -1,18 +1,18 @@
-export NSECTORS=2048
-export KERNEL_OFFSET=0x10000
-export CONSTANTS=-dKERNEL_OFFSET=$(KERNEL_OFFSET) -dSTACK_OFFSET_16=0x9000 -dSTACK_OFFSET_32=0x90000 -dNSECTORS=$(NSECTORS)
-
-TARGET=$(BIN_DIRECTORY)image.iso
-BOOT_BIN=$(BIN_DIRECTORY)boot.bin
-KERNEL_BIN=$(BIN_DIRECTORY)kernel.bin
+TARGET=$(BIN_DIRECTORY)custom-os
+BOOT_BIN=$(BIN_DIRECTORY)boot.o
+KERNEL_BIN=$(BIN_DIRECTORY)kernel.o
 
 .PHONY: all
 all: $(TARGET)
 	@:
 
-$(TARGET): $(BOOT_BIN) $(KERNEL_BIN) Makefile
-	cat $(BOOT_BIN) $(KERNEL_BIN) > $@
-	$(BUILD_SCRIPT_DIRECTORY)pad.sh $@ $(NSECTORS)
+$(TARGET): $(TARGET).elf Makefile
+	@echo "GRUB $(notdir $@)"
+	@$(BUILD_SCRIPT_DIRECTORY)mkBoot.sh $(TARGET) $(BIN_DIRECTORY)
+
+$(TARGET).elf: $(BOOT_BIN) $(KERNEL_BIN) Makefile
+	@echo "LD $(notdir $@)"
+	@$(LD) -T$(BUILD_SCRIPT_DIRECTORY)link.ld $(BOOT_BIN) $(KERNEL_BIN) -o $@
 
 $(BOOT_BIN): Makefile
 	@echo "make --directory=boot"

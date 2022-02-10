@@ -21,8 +21,17 @@ void rdtsc(uint32_t* low, uint32_t* high) {
     __asm__ volatile("rdtsc" : "=a"(*low), "=d"(*high));
 }
 
-void main() {
+void kernel_main() {
+
+    idt_init();
+    pic_init();
+    isr_init();
+
+    //pit_init(50);
+
     SC_init();
+
+    //__asm__("int3");
 //#define TERM_COLOR VGA_COLOR_GREEN, VGA_COLOR_DARK_GREY
 //#define TERM_COLOR VGA_COLOR_WHITE, VGA_COLOR_DARK_GREY
 #define TERM_COLOR VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK
@@ -30,7 +39,7 @@ void main() {
     SC_setCursorAttribute(TERM_COLOR);
     SC_clearScreen();
 
-    // kb_init();
+    kb_init();
 
     SC_printString("Hello, World!\n");
     SC_printString("I am running in the kernel!!!\n");

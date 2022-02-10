@@ -3,20 +3,19 @@
 override CFLAGS+= -ffreestanding -m32 --target=i386-unknown-linux-gnu
 override CFLAGS+= -mno-sse
 override LDFLAGS+= 
-#-Ttext $(KERNEL_OFFSET)
 
 C_SOURCES=$(wildcard *.c) $(wildcard */*.c) $(wildcard */*/*.c)
 C_OBJECTS=$(patsubst %.c,%.o,$(C_SOURCES))
-START=_start_a.o
 A_SOURCES=$(wildcard *.asm) $(wildcard */*.asm) $(wildcard */*/*.asm)
 A_OBJECTS=$(filter-out $(START),$(patsubst %.asm,%_a.o,$(A_SOURCES)))
+OBJECTS=$(C_OBJECTS) $(A_OBJECTS)
 DEPENDS=$(patsubst %.c,%.d,$(C_SOURCES))
 DEPENDS+= $(patsubst %.asm,%_a.d,$(A_SOURCES))
 
 INCLUDE= -I$(ROOT_PROJECT_DIRECTORY)src/kernel
 
-TARGET=$(BIN_DIRECTORY)kernel
-
+KERNEL_BIN=kernel.o
+TARGET=$(BIN_DIRECTORY)$(KERNEL_BIN)
 
 .PHONY: all
 all: $(TARGET)
@@ -24,22 +23,21 @@ all: $(TARGET)
 
 .PHONY: clean
 clean:
-	$(RM) $(TARGET) $(DEPENDS) $(START) $(C_OBJECTS) $(A_OBJECTS)
+	$(RM) $(KERNEL_BIN) $(DEPENDS) $(OBJECTS)
 
-.PHONY: $(TARGET)
-$(TARGET): $(TARGET).bin
+$(TARGET): $(KERNEL_BIN) Makefile
+	@cp $(KERNEL_BIN) $(TARGET)
 
-$(TARGET).bin: $(TARGET).elf
-	$(OBJCOPY) -O binary $< $@
-
-$(TARGET).elf: $(START) $(C_OBJECTS) $(A_OBJECTS) Makefile
-	$(LD) $(START) $(C_OBJECTS) $(A_OBJECTS) $(LDFLAGS) $(LDLIBS) -T$(ROOT_PROJECT_DIRECTORY)build-scripts/link.ld -o $@
+$(KERNEL_BIN): $(OBJECTS) Makefile
+	@echo "LD $@"
+	@$(LD) $(OBJECTS) $(LDFLAGS) $(LDLIBS) -r -o $@
 
 %.o: %.c Makefile
-	$(CC) $(CFLAGS) $(DEPENFLAGS) $(INCLUDE) -c $< -o $@
+	@echo "CC $@"
+	@$(CC) $(CFLAGS) $(DEPENFLAGS) $(INCLUDE) -c $< -o $@
 
 %_a.o: %.asm Makefile
-#@$(AS) -M $< > $(patsubst %.asm,%_a.d,$<)
-	$(AS) -f elf $(CONSTANTS) $< -o $@ -MD $(patsubst %.asm,%.d,$<)
+	@echo "AS $@"
+	@$(AS) -felf $(CONSTANTS) $< -o $@ -MD $(patsubst %.asm,%.d,$<)
 
 -include $(DEPENDS)
