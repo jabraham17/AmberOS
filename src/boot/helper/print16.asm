@@ -3,11 +3,11 @@
 bits 16
 
 ; because of segement register, if we put this in es we it is extended to full 0xb8000
-VIDEO_MEMORY_16 equ 0xb800
-ROWS equ 25
-COLS equ 80
-NCHARS equ ROWS*COLS
-WHITE_ON_BLACK equ 0x0f
+%define VIDEO_MEMORY_16 0xb800
+%define ROWS 25
+%define COLS 80
+%define NCHARS ROWS*COLS
+%define WHITE_ON_BLACK 0x0f
 ; 0xb8000 + 2 * (row * 80 + col)
 
 clear_screen_16:

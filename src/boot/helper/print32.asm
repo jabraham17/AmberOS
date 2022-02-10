@@ -2,11 +2,11 @@
 %define _IC_HELPER_RINT32_ASM_
 bits 32
 
-VIDEO_MEMORY equ 0xb8000
-ROWS equ 25
-COLS equ 80
-NCHARS equ ROWS*COLS
-WHITE_ON_BLACK equ 0x0f
+%define VIDEO_MEMORY 0xb8000
+%define ROWS 25
+%define COLS 80
+%define NCHARS ROWS*COLS
+%define WHITE_ON_BLACK 0x0f
 
 clear_screen_32:
     pusha

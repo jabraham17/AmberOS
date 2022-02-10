@@ -11,29 +11,18 @@ switch_32pm:
     or eax, 0x01
     mov cr0, eax
 
-    jmp CODE_SEG:init_32pm  ; far jump to 32 bit code
+    jmp CODE_SEG:.flush  ; far jump to 32 bit code
 
-
+; here we are in 32 bit land
 bits 32
-init_32pm:
+.flush:
     mov ax, DATA_SEG ; reset all regment regs to data 
     mov ds, ax
-    mov ss, ax
     mov es, ax
     mov fs, ax
     mov gs, ax
+    mov ss, ax
 
-    ; set stack pointer
-    mov esp, STACK_OFFSET_32
-    xor ebp, ebp
-
-    jmp BEGIN_PM
-
-bits 32
-BEGIN_PM:
-    mov eax, strings.pm_mode
-    call print_str_32
-    jmp KERNEL_OFFSET
-    ; never return here
+    jmp KERNEL_OFFSET ; we never return here
 
 %endif

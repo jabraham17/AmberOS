@@ -18,12 +18,18 @@ jmp _boot
 %error "NSECTORS must be defined"
 %endif
 
-%include "helper/disk_load.asm"
-%include "helper/print16.asm"
-%include "helper/print32.asm"
-%include "stage1/gdt.asm"
-%include "stage1/switch32.asm"
-%include "stage1/a20.asm"
+; %include "helper/disk_load.asm"
+; %include "helper/print16.asm"
+; %include "helper/print32.asm"
+; %include "stage1/gdt.asm"
+; %include "stage1/switch32.asm"
+; %include "stage1/a20.asm"
+%include "disk_load.asm"
+%include "print16.asm"
+%include "print32.asm"
+%include "gdt.asm"
+%include "switch32.asm"
+%include "a20.asm"
 
 bits 16
 _boot:
@@ -51,8 +57,7 @@ _boot:
 
     mov ax, strings.switch_pm_mode
     call print_str_16
-    jmp switch_32pm
-
+    jmp switch_32pm ; we never return from here, this will jump to the kernel
 
 load_kernel:
     ; load sectors for kernel
@@ -77,7 +82,6 @@ strings:
     .real_mode: db "Booted 16-bit", 0
     .load_kernel: db "Loaded kernel", 0
     .switch_pm_mode: db "Switch 32-bit", 0
-    .pm_mode: db "In 32-bit", 0
 
 ; global variables
 globals:

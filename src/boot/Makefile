@@ -32,8 +32,7 @@ override CONSTANTS+= -dSTAGE1_NSECTORS=$$($(BUILD_SCRIPT_DIRECTORY)countSectors.
 # assembly to binary
 # if not an even 512 byte multiple, make it so
 %.bin: %.asm Makefile
-	@$(AS) -M $< > $(patsubst %.asm,%.d,$<)
-	$(AS) -fbin $(CONSTANTS) $< -o $@
+	$(AS) -f bin $(CONSTANTS) -Ihelper -Istage1 $< -o $@ -MD $(patsubst %.asm,%.d,$<)
 	$(BUILD_SCRIPT_DIRECTORY)pad.sh $@
 
 
