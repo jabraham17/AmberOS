@@ -22,7 +22,7 @@ SECTIONS
 	/* Read-only data. */
 	.rodata : ALIGN(4K)
 	{
-		*(.rodata)
+		*(.rodata*)
 	}
  
 	/* Read-write data (initialized) */
