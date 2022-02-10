@@ -10,6 +10,7 @@ bits 32
 extern idt_init
 extern pic_init
 extern isr_init
+extern pit_init
 extern main
 global _start
 _start:
@@ -21,6 +22,10 @@ _start:
     call idt_init
     call pic_init
     call isr_init
+
+    ; push 50 ; 50 hertz timer
+    call pit_init
+    ; add esp, 4 ; pop nowhere
 
     call main
     jmp $
