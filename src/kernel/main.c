@@ -9,6 +9,8 @@
 
 #include <stdlib/string.h>
 
+#include <mm/detectmem.h>
+
 void rdmsr(uint32_t code, uint32_t* edx, uint32_t* eax) {
     __asm__ volatile("rdmsr" : "=a"(*eax), "=d"(*edx) : "c"(code) :);
 }
@@ -27,12 +29,6 @@ void rdtsc(uint32_t* low, uint32_t* high) {
 }
 
 void kernel_main() {
-
-    idt_init();
-    pic_init();
-    isr_init();
-    pit_init(50); //50hz clock
-    SC_init();
 
 //#define TERM_COLOR VGA_COLOR_GREEN, VGA_COLOR_DARK_GREY
 //#define TERM_COLOR VGA_COLOR_WHITE, VGA_COLOR_DARK_GREY
@@ -61,6 +57,10 @@ void kernel_main() {
     SC_printf(
         "\nReally big hex number 0x%hhx, 0x%hx, 0x%x\n", big_hex, big_hex,
         big_hex);
+
+    SC_printf("multiboot ptr 0x%x\nmagic 0x%x\n", dm_mbd, dm_magic);
+    dm_printmm();
+    frame_init();
 
 #if defined(DEBUG) && DEBUG == 1
     SC_debugColorMatrix();
