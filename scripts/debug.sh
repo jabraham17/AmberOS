@@ -19,7 +19,7 @@ tmux new-session -d -s _qemu "DEBUG_MODE=1 $SCRIPT_DIR/run.sh"
 tmux new-window 
 tmux rename-window "_gdb_window"
 
-tmux send "gdb bin/custom-os.elf \
+tmux send "gdb bin/AmberOS.elf \
 -x $SCRIPT_DIR/gdb_cmds \
 -ex \"target remote :1234\" \
 $@ \

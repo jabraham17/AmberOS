@@ -14,7 +14,7 @@ realpath() {
 }
 
 SCRIPT_DIR=$(realpath "$(dirname "${BASH_SOURCE[0]}")")
-DRIVE=$SCRIPT_DIR/../bin/custom-os.iso
+DRIVE=$SCRIPT_DIR/../bin/AmberOS.iso
 
 # initial setup stuff
 # mkfifo $SCRIPT_DIR/monitor.in $SCRIPT_DIR/monitor.out
