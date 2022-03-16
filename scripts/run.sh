@@ -13,12 +13,24 @@ realpath() {
   echo "$REALPATH"
 }
 
-SCRIPT_DIR=$(realpath "$(dirname "${BASH_SOURCE[0]}")")
+SCRIPT_NAME=
+if [ -z $BASH_SOURCE ]; then
+    SCRIPT_NAME=$0
+else
+    SCRIPT_NAME=${BASH_SOURCE[0]}
+fi
+
+SCRIPT_DIR=$(realpath "$(dirname "$SCRIPT_NAME")")
 DRIVE=$SCRIPT_DIR/../bin/AmberOS.iso
 
 # initial setup stuff
-# mkfifo $SCRIPT_DIR/monitor.in $SCRIPT_DIR/monitor.out
-# mkfifo $SCRIPT_DIR/serial.in $SCRIPT_DIR/serial.out
+test -f $SCRIPT_DIR/monitor.in && rm -f $SCRIPT_DIR/monitor.in
+test -f $SCRIPT_DIR/monitor.out && rm -f $SCRIPT_DIR/monitor.out
+test -f $SCRIPT_DIR/serial.in && rm -f $SCRIPT_DIR/serial.in
+test -f $SCRIPT_DIR/serial.in && rm -f $SCRIPT_DIR/serial.in
+mkfifo $SCRIPT_DIR/monitor.in $SCRIPT_DIR/monitor.out
+mkfifo $SCRIPT_DIR/serial.in $SCRIPT_DIR/serial.out
+touch $SCRIPT_DIR/runlog.txt
 
 # start detatched qemu
 if [ $DEBUG_MODE ]; then

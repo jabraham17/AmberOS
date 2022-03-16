@@ -12,14 +12,23 @@ realpath() {
   cd "$OURPWD"
   echo "$REALPATH"
 }
-SCRIPT_DIR=$(realpath "$(dirname "${BASH_SOURCE[0]}")")
+
+SCRIPT_NAME=
+if [ -z $BASH_SOURCE ]; then
+    SCRIPT_NAME=$0
+else
+    SCRIPT_NAME=${BASH_SOURCE[0]}
+fi
+
+SCRIPT_DIR=$(realpath "$(dirname "$SCRIPT_NAME")")
+ELF=$SCRIPT_DIR/../bin/AmberOS.elf
 
 tmux new-session -d -s _qemu "DEBUG_MODE=1 $SCRIPT_DIR/run.sh"
 
 tmux new-window 
 tmux rename-window "_gdb_window"
 
-tmux send "gdb bin/AmberOS.elf \
+tmux send "gdb $ELF \
 -x $SCRIPT_DIR/gdb_cmds \
 -ex \"target remote :1234\" \
 $@ \

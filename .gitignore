@@ -6,3 +6,4 @@ hello_world16
 *.bin
 bin/
 runlog.txt
+.gdb_history
