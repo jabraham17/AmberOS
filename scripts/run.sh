@@ -24,13 +24,13 @@ SCRIPT_DIR=$(realpath "$(dirname "$SCRIPT_NAME")")
 DRIVE=$SCRIPT_DIR/../bin/AmberOS.iso
 
 # initial setup stuff
-test -f $SCRIPT_DIR/monitor.in && rm -f $SCRIPT_DIR/monitor.in
-test -f $SCRIPT_DIR/monitor.out && rm -f $SCRIPT_DIR/monitor.out
-test -f $SCRIPT_DIR/serial.in && rm -f $SCRIPT_DIR/serial.in
-test -f $SCRIPT_DIR/serial.in && rm -f $SCRIPT_DIR/serial.in
+test -e $SCRIPT_DIR/monitor.in && rm -f $SCRIPT_DIR/monitor.in
+test -e $SCRIPT_DIR/monitor.out && rm -f $SCRIPT_DIR/monitor.out
+test -e $SCRIPT_DIR/serial.in && rm -f $SCRIPT_DIR/serial.in
+test -e $SCRIPT_DIR/serial.out && rm -f $SCRIPT_DIR/serial.out
 mkfifo $SCRIPT_DIR/monitor.in $SCRIPT_DIR/monitor.out
 mkfifo $SCRIPT_DIR/serial.in $SCRIPT_DIR/serial.out
-touch $SCRIPT_DIR/runlog.txt
+test -f $SCRIPT_DIR/runlog.txt && echo "" > $SCRIPT_DIR/runlog.txt
 
 # start detatched qemu
 if [ $DEBUG_MODE ]; then
