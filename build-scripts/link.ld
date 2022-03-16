@@ -26,7 +26,6 @@ SECTIONS
     __kernel_start = .;
 	.text ALIGN(4K) :
 	{
-        __kernel_start_a = .;
 		*(.text)
 	}
 	.rodata ALIGN(4K) :
