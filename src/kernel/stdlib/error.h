@@ -4,8 +4,9 @@
 
 #include "types.h"
 
-#define HALT __asm__ volatile ("1: jmp 1b");
+#define HALT __asm__ volatile (".label: jmp .label");
 void panic(char* msg);
 void stacktrace(char* buffer, size_t nbuffer, size_t maxFrames);
 
 #endif
+

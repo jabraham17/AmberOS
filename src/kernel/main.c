@@ -37,7 +37,7 @@ void kernel_main() {
     SC_setCursorAttribute(TERM_COLOR);
     SC_clearScreen();
 
-    //kb_init();
+    kb_init();
 
     SC_printString("Hello, World!\n");
     SC_printString("I am running in the kernel!!!\n");
@@ -60,7 +60,7 @@ void kernel_main() {
 
     SC_printf("multiboot ptr 0x%x\nmagic 0x%x\n", dm_mbd, dm_magic);
     dm_printmm();
-    frame_init();
+    // frame_init();
 
 #if defined(DEBUG) && DEBUG == 1
     SC_debugColorMatrix();
