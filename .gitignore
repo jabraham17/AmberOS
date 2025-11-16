@@ -1,6 +1,5 @@
 *.vscode/
 *.DS_Store
-hello_world16
 *.d
 *.o
 *.bin
