@@ -12,7 +12,7 @@ export BUILD_SCRIPT_DIRECTORY=$(ROOT_PROJECT_DIRECTORY)build-scripts/
 
 export CC=clang
 export AS=nasm
-export LD=/usr/local/opt/llvm/bin/ld.lld
+export LD=ld.lld
 
 export EXTENSION=c
 

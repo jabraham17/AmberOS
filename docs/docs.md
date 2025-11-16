@@ -8,3 +8,6 @@ http://www.osdever.net/FreeVGA/home.htm
 
 
 http://www.jamesmolloy.co.uk/tutorial_html/
+
+
+https://github.com/levex/osdev

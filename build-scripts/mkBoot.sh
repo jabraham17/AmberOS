@@ -17,7 +17,7 @@ if [ ! -d $BIN ]; then
     echo "Error: Could not find $BIN"
     exit 1
 fi
-grub-file --is-x86-multiboot $KERNEL_ELF
+grub2-file --is-x86-multiboot $KERNEL_ELF
 if [ $? -eq 1 ]; then
     echo "Error: $KERNEL_ELF is not multiboot"
     exit 1
@@ -34,4 +34,4 @@ echo "menuentry \"$OSNAME\" {
 mkdir -p $BIN/isodir/boot/grub
 cp $KERNEL_ELF $BIN/isodir/boot/$OSNAME.elf
 cp $GRUB_CFG $BIN/isodir/boot/grub/grub.cfg
-grub-mkrescue -o $KERNEL_ISO $BIN/isodir
+grub2-mkrescue -o $KERNEL_ISO $BIN/isodir

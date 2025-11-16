@@ -9,6 +9,8 @@ take flash drive, partition schemem Master Boot record, FAT
 
 on mac, this makes the partition table /dev/disk2 and the actual contents at /dev/disk2s1
 
+on linux (my fedora box for example), it might be /dev/sdb with actual contents at /dev/sdb1
+
 we will overwrite partition table at /dev/disk2 with `sudo dd if=bin/image.iso of=/dev/disk2`
 
 for some reason, if there is more than ~400~ bytes of stuff in boot.bin, fails to boot and goes straight to other harddrive
