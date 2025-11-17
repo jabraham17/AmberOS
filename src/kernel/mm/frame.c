@@ -1,5 +1,12 @@
 #include "frame.h"
+#include <drivers/screen/screen.h>
 
+uint32_t frames[NFRAMES / 32];
+
+extern uint32_t __kernel_start;
+uintptr_t _kernel_start = (uintptr_t)&__kernel_start;
+extern uint32_t __kernel_end;
+uintptr_t _kernel_end = (uintptr_t)&__kernel_end;
 
 // align _kernel_end to 4k
 void frame_init() {

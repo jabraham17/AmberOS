@@ -10,6 +10,7 @@
 #include <stdlib/string.h>
 
 #include <mm/detectmem.h>
+#include <mm/frame.h>
 
 void rdmsr(uint32_t code, uint32_t* edx, uint32_t* eax) {
     __asm__ volatile("rdmsr" : "=a"(*eax), "=d"(*edx) : "c"(code) :);
@@ -51,7 +52,7 @@ void kernel_main() {
     SC_printf(
         "hello my name is %%%s%% and my favorite number is %d, which in hex is "
         "0x%x",
-        "steven", 17, 0x11);
+        "jade", 17, 0x11);
 
     int big_hex = 0xDEADBEEF;
     SC_printf(

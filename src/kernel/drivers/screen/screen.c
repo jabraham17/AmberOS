@@ -152,13 +152,13 @@ void SC_printStringAt(char* str, int row, int col) {
 }
 void SC_printString(char* str) { SC_printStringAt(str, -1, -1); }
 
-char printf_buffer[1024];
+char SC_printf_buffer[1024];
 void SC_printf(char* fmt, ...) {
     va_list args;
     va_start(args, fmt);
-    vsprintf(printf_buffer, fmt, args);
+    vsprintf(SC_printf_buffer, fmt, args);
     va_end();
-    SC_printString(printf_buffer);
+    SC_printString(SC_printf_buffer);
 }
 void SC_printCharAt(
     char ch, unsigned int row, unsigned int col, char attribute) {
