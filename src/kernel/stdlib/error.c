@@ -25,7 +25,7 @@ struct stackframe {
 };
 void stacktrace(char* buffer, size_t nbuffer, size_t maxFrames) {
   struct stackframe* stk;
-  __asm__ volatile("movl %%ebp,%0 \n " : "+r"(stk));
+  __asm__ volatile("mov %0,ebp \n " : "+r"(stk));
   char* bufEnd = buffer + nbuffer;
   for(size_t frame = 0; stk != 0 && frame < maxFrames && buffer < bufEnd;
       frame++) {
