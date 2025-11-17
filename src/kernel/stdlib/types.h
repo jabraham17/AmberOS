@@ -22,5 +22,4 @@ typedef int32_t intptr_t;
 #define true 1
 #define false 0
 
-
 #endif

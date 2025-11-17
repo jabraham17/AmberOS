@@ -9,12 +9,11 @@
 
 extern uint32_t frames[NFRAMES / 32];
 #define SET_FRAME_BIT(_idx)                                                    \
-    frames[(uint32_t)((_idx) / 32)] |= (0x01 << (uint32_t)((_idx) % 32))
+  frames[(uint32_t)((_idx) / 32)] |= (0x01 << (uint32_t)((_idx) % 32))
 #define CLEAR_FRAME_BIT(_idx)                                                  \
-    frames[(uint32_t)((_idx) / 32)] &= ~(0x01 << (uint32_t)((_idx) % 32))
+  frames[(uint32_t)((_idx) / 32)] &= ~(0x01 << (uint32_t)((_idx) % 32))
 #define GET_FRAME_BIT(_idx)                                                    \
-    (frames[(uint32_t)((_idx) / 32)] & (0x01 << (uint32_t)((_idx) % 32)))
-
+  (frames[(uint32_t)((_idx) / 32)] & (0x01 << (uint32_t)((_idx) % 32)))
 
 extern uintptr_t _kernel_start;
 extern uintptr_t _kernel_end;
@@ -23,13 +22,12 @@ extern uintptr_t _kernel_end;
 
 // ALIGN_PTR(_kernel_start, 12)
 #define ALIGN_PTR(_ptr, _alignment)                                            \
-    ((((uintptr_t)_ptr) + _ALIGN_BYTE_OFFSET(_alignment)) &                     \
-     ~_ALIGN_BYTE_OFFSET(_alignment))
+  ((((uintptr_t)_ptr) + _ALIGN_BYTE_OFFSET(_alignment)) &                      \
+   ~_ALIGN_BYTE_OFFSET(_alignment))
 
 // ALIGN_PTR(_kernel_start, 0xFFF)
 //   #define ALIGN_PTR(_ptr, _mask)\
 // ((uintptr_t)_ptr + (((~((uintptr_t)_ptr)) + 1) & (_mask)))
-
 
 void frame_init();
 

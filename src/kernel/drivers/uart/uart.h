@@ -12,7 +12,6 @@
 #define COM7 0x05E8
 #define COM8 0x04E8
 
-
 void uart_putc(char ch);
 void uart_puts(char* str);
 
